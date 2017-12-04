@@ -16,8 +16,9 @@ public class MethodBeforeInterceptor implements MethodBeforeAdvice {
 
 			String name = ((AopServiceImpl) instance).getName();
 
-			if (name == null)
+			if (name == null)  {
 				throw new NullPointerException("name属性不能为null");
+			}
 		}
 
 	}

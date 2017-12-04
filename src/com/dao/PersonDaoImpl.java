@@ -1,4 +1,4 @@
-package com.jdbc;
+package com.dao;
 
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 

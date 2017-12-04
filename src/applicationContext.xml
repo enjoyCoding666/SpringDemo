@@ -20,7 +20,7 @@
 
     <!--<bean id="daoImpl" class="com.interceptor.DaoImpl"></bean>-->
     <!--<bean id="service" class="com.interceptor.ServiceImpl">-->
-    <!--<property ref="daoImpl" name="jdbc"> </property>-->
+    <!--<property ref="daoImpl" name="dao"> </property>-->
     <!--</bean>-->
 
     <!--dao实例、serviceImp实例-->
@@ -64,7 +64,9 @@
         <property name="mappedName" value="withAop"></property>
     </bean>
 
+    <!--将拦截器配置到代理类上-->
     <bean id="aopService" class="org.springframework.aop.framework.ProxyFactoryBean">
+        <!--拦截器-->
         <property name="interceptorNames">
             <list>
                <value>aopMethodBeforeInterceptor</value>
@@ -72,6 +74,7 @@
                <value>aopThrowInterceptor</value>
             </list>
         </property>
+        <!--拦截对象 -->
         <property name="target">
             <bean class="com.aop.AopServiceImpl">
                 <property name="name" value="Rui"></property>
@@ -89,7 +92,7 @@
     </bean>
 
     <!--将数据源注入对象中-->
-    <bean id="personDao" class="com.jdbc.PersonDaoImpl"
+    <bean id="personDao" class="com.dao.PersonDaoImpl"
          depends-on="dataSource" init-method="initDatabase">
         <property name="dataSource" ref="dataSource"></property>
 

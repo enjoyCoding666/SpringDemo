@@ -18,7 +18,7 @@
     <%
         try {
             System.out.println("<------------------开始数据源测试");
-            String DSNMAE="java:comp/env/jdbc/worker";
+            String DSNMAE="java:comp/env/dao/worker";
             Context ctx=new InitialContext();
             DataSource ds=(DataSource)ctx.lookup(DSNMAE);
             Connection conn=ds.getConnection();

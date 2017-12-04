@@ -6,14 +6,18 @@ public class AopServiceImpl implements IAopService {
 
 	private String name;
 
+	@Override
 	public void withAop() throws Exception {
 
 		System.out.println("有AOP的函数运行。name: " + name);
 
-		if (name.trim().length() == 0)
+		if (name.trim().length() == 0) {
 			throw new AccountException("name属性不能为空");
+		}
+
 	}
 
+	@Override
 	public void withoutAop() throws Exception {
 		System.out.println("没有AOP的函数运行。");
 	}

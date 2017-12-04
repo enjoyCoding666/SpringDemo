@@ -1,4 +1,4 @@
-package com.jdbc;
+package com.dao;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;

@@ -9,7 +9,7 @@ import java.sql.Connection;
  * Created by lenovo on 2017/5/9.
  */
 public class DatabaseConnection {
-   private static final String DSNAME="java:comp/env/jdbc/worker";
+   private static final String DSNAME="java:comp/env/dao/worker";
    private Connection conn=null;
    public DatabaseConnection() throws Exception {
        try{
