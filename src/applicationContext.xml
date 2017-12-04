@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="helloWorld" class="com.base.HelloWorld">
+        <property name="message" value="Hello World!"/>
+    </bean>
+
+    <!-- 拦截器对象 -->
+    <bean id="methodBeforeAdviceImpl" class="com.interceptor.MethodBeforeAdviceImpl"></bean>
+    <!-- 配置拦截器 -->
+    <bean id="theAdvisor" class="org.springframework.aop.support.NameMatchMethodPointcutAdvisor">
+        <property name="advice">
+            <ref bean="methodBeforeAdviceImpl"/>
+        </property>
+        <!-- 拦截所有的方法 -->
+        <property name="mappedName" value="*"></property>
+    </bean>
+
+    <!--<bean id="daoImpl" class="com.interceptor.DaoImpl"></bean>-->
+    <!--<bean id="service" class="com.interceptor.ServiceImpl">-->
+    <!--<property ref="daoImpl" name="jdbc"> </property>-->
+    <!--</bean>-->
+
+    <!--dao实例、serviceImp实例-->
+    <bean id="dao" class="com.interceptor.DaoImpl"></bean>
+    <bean id="serviceImpl" class="com.interceptor.ServiceImpl">
+        <property name="dao" ref="dao"></property>
+    </bean>
+
+    <!--将拦截器配置到代理类上-->
+    <bean id="service" class="org.springframework.aop.framework.ProxyFactoryBean">
+        <!--拦截器-->
+        <property name="interceptorNames" value="theAdvisor"></property>
+        <!--拦截对象-->
+        <property name="target">
+            <ref bean="serviceImpl"></ref>
+        </property>
+    </bean>
+
+<!--拦截器在方法前运行，安装到NameMatchMethodPointcutAdvisor-->
+    <bean id="aopMethodBeforeInterceptor"
+      class="org.springframework.aop.support.NameMatchMethodPointcutAdvisor">
+        <property name="advice">
+            <bean class="com.aop.MethodBeforeInterceptor"></bean>
+        </property>
+        <property name="mappedName" value="withAop"></property>
+    </bean>
+
+    <!--拦截器在方法后运行，安装到NameMatchMethodPointcutAdvisor-->
+    <bean id="aopMethodAfterInterceptor" class="org.springframework.aop.support.NameMatchMethodPointcutAdvisor">
+          <property name="advice" >
+              <bean class="com.aop.MethodAfterInterceptor"></bean>
+          </property>
+          <property name="mappedName" value="withAop"></property>
+    </bean>
+
+    <!--拦截器在异常抛出运行，安装到NameMatchMethodPointcutAdvisor-->
+    <bean id="aopThrowInterceptor" class="org.springframework.aop.support.NameMatchMethodPointcutAdvisor">
+        <property name="advice">
+            <bean class="com.aop.ThrowsInterceptor"></bean>
+        </property>
+        <property name="mappedName" value="withAop"></property>
+    </bean>
+
+    <bean id="aopService" class="org.springframework.aop.framework.ProxyFactoryBean">
+        <property name="interceptorNames">
+            <list>
+               <value>aopMethodBeforeInterceptor</value>
+                <value>aopMethodAfterInterceptor</value>
+               <value>aopThrowInterceptor</value>
+            </list>
+        </property>
+        <property name="target">
+            <bean class="com.aop.AopServiceImpl">
+                <property name="name" value="Rui"></property>
+            </bean>
+        </property>
+    </bean>
+
+    <!--配置数据源-->
+    <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource"
+           destroy-method="close"  >
+         <property name="driverClassName" value="com.mysql.jdbc.Driver"></property>
+          <property name="url" value="jdbc:mysql://localhost:3306/spring?characterEncoding=UTF-8"></property>
+         <property name="username" value="root"></property>
+         <property name="password" value="root"></property>
+    </bean>
+
+    <!--将数据源注入对象中-->
+    <bean id="personDao" class="com.jdbc.PersonDaoImpl"
+         depends-on="dataSource" init-method="initDatabase">
+        <property name="dataSource" ref="dataSource"></property>
+
+    </bean>
+
+
+    <bean id="catDao"
+          class="com.mvc.CatDaoImpl">
+    </bean>
+
+</beans>
